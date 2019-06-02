@@ -6,16 +6,16 @@ import matplotlib.pyplot as plt
 import struct #for dealing with binary data
 import time
 
-#python version of functions in ymaeda_tools.
+#Python version of functions in ymaeda_tools.
 
-#test directory:
-main_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/t60_p100/x-10900y-121100z1000/'
+#test directories for testing!!!:
+#main_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/t60_p100/x-10900y-121100z1000/'
 #snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot"
-snapshot_dir="/media/yumi/INVERSION/GFDIR1/SMN_EW_SMALL/PML/snapshot"
+#snapshot_dir="/media/yumi/INVERSION/GFDIR1/SMN_EW_SMALL/PML/snapshot"
 #main_dir='/Volumes/Verbatim/kirishima_invert_reduce/inversion_results_dump_new/inversion_result_residuals117/t60_p100/x-10900y-121100z1000/'
-data_obs_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/data_obs/inv_data_dir_supershort_filtered/'
-data_obs_spectrum_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/data_obs_spectrum/inv_data_dir_supershort_filtered/'
-stfun_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/'
+#data_obs_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/data_obs/inv_data_dir_supershort_filtered/'
+#data_obs_spectrum_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/data_obs_spectrum/inv_data_dir_supershort_filtered/'
+#stfun_dir='/home/yumi/kirishima_invert/inversion_results_dump_new/inversion_result_residuals117/'
 
 df=0.002441406 #frequency step size used by YMAEDA_TOOLS
 f=arange(0,df*2049,df) #frequency half space
