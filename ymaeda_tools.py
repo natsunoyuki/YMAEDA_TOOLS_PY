@@ -39,6 +39,16 @@ def read_snapshot(snapshot_dir='source.Fx.t3.0000.3db'):
     The most out loop is that with regard to "x",
     the intermediate is "y" and the most inner loop is "z".
     Separators such as tab do not appear.
+    
+    Inputs
+    ------
+    snapshot_dir: str
+        str containing the directory of the .3db snapshot files
+    
+    Returns
+    -------
+    GT, GT3D: np.array, np.array
+        np.array containing the loaded snapshots
     """
     # Note: As this function relies on loading the entire grid
     # of data, processing can be very slow.
@@ -77,6 +87,17 @@ def read_snapshot_fast(snapshot_dir='source.Fx.t3.0000.3db'):
     The most out loop is that with regard to "x",
     the intermediate is "y" and the most inner loop is "z".
     Separators such as tab do not appear.
+    
+    Inputs
+    ------
+    snapshot_dir: str
+        str containing the directory of the .3db snapshot files
+    
+    Returns
+    -------
+    GT, N: np.array, list
+        np.array containing the loaded snapshots
+        list containing the number of finite elements for x, y and z axes
     """
     # Unlike the previous function this one outputs the data as a 1D array
     # to speed up load and output times
@@ -103,6 +124,23 @@ def index_convert13(r, Nx, Ny, Nz):
     next inner loop: y
     inner most loop: z
     therefore z is the most folded coordinate followed by y, x
+    
+    Inputs
+    ------
+    r: int
+        folded coordinate index
+    Nx: int
+        number of x elements
+    Ny: int
+        number of y elements
+    Nz int
+        number of z elements
+        
+    Outputs
+    -------
+    idz,idy,idx: int, int, int
+        indices for the 3 dimensions z, y and x
+    
     """
     idz = np.mod(r, Nz) # most folded coordinate
     idy = np.mod(r // Nz, Ny) # next folded coordinate
@@ -113,6 +151,26 @@ def index_convert13(r, Nx, Ny, Nz):
 def index_convert31(idx, idy, idz, Nx, Ny, Nz):
     """
     converts the 3D index of GT3D to the 1D index of GT
+    
+    Inputs
+    ------
+    idx: int
+        index of x
+    idy: int
+        index of y
+    idz: int
+        index of z
+    Nx: int
+        number of x elements
+    Ny: int
+        number of y elements
+    Nz int
+        number of z elements
+        
+    Returns
+    -------
+    r: int
+        folded coordinate index
     """
     r = idx * Ny * Nz + idy * Nz + idz
     return r
@@ -125,6 +183,26 @@ def read_snapshot_loc(snapshot_dir, direction='z', X=0, Y=0, Z=0, t0=0.0, t1=12.
     t,gx=read_snapshot_loc(snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot",direction='x',X=idx,Y=idy,Z=idz);
     t,gy=read_snapshot_loc(snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot",direction='y',X=idx,Y=idy,Z=idz);
     t,gz=read_snapshot_loc(snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot",direction='z',X=idx,Y=idy,Z=idz);
+    
+    Inputs
+    ------
+    snapshot_dir: str
+        str of the directory containing the snapshot files
+    direction: str; 'x', 'y' or 'z' only
+        read either x, y or z axis data
+    X: int
+        x index idx
+    Y: int
+        y index idy
+    Z: int
+        z index idz
+    
+    Returns
+    -------
+    t: np.array
+        np.array containing time
+    gt: np.array
+        np.array containing the loaded snapshot for either x, y or z axis
     """
     t = np.arange(t0, t1+dt, dt)
     N = int((t1-t0)/dt)+1
@@ -145,9 +223,31 @@ def read_snapshot_loc_fast(snapshot_dir, direction='z', X=0, Y=0, Z=0, t0=0.0, t
     location indices X, Y, Z over a time range of t0:t1 with dt.
     Faster code that deals with only 1D array structures
     
+    This function should be used instead of the previous one for speed gains!
+    
     t,gx=read_snapshot_loc_fast(snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot",direction='x',X=idx,Y=idy,Z=idz);
     t,gy=read_snapshot_loc_fast(snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot",direction='y',X=idx,Y=idy,Z=idz);
     t,gz=read_snapshot_loc_fast(snapshot_dir="/media/yumi/INVERSION/SMN_EW_SMALL/PML/snapshot",direction='z',X=idx,Y=idy,Z=idz);
+    
+    Inputs
+    ------
+    snapshot_dir: str
+        str of the directory containing the snapshot files
+    direction: str; 'x', 'y' or 'z' only
+        read either x, y or z axis data
+    X: int
+        x index idx
+    Y: int
+        y index idy
+    Z: int
+        z index idz
+    
+    Returns
+    -------
+    t: np.array
+        np.array containing time
+    gt: np.array
+        np.array containing the loaded snapshot for either x, y or z axis    
     """
     t = np.arange(t0, t1+dt, dt)
     N = int((t1-t0)/dt)+1
@@ -163,9 +263,29 @@ def read_snapshot_loc_fast(snapshot_dir, direction='z', X=0, Y=0, Z=0, t0=0.0, t
     return t,gt
 
 def read_snapshot_all_fast(snapshot_dir, direction='z', t0=0.0, t1=12.0, dt=0.1):
-    # This function reads and loads the entire snapshot over the specified
-    # time range for a particular direction. THIS WILL CONSUME PLENTY OF 
-    # MEMORY and should not be used lightly on slower computers.
+    """
+    This function reads and loads the entire snapshot over the specified
+    time range for a particular direction. THIS WILL CONSUME PLENTY OF 
+    MEMORY and should not be used lightly on slower computers.
+    
+    Inputs
+    ------
+    snapshot_dir: str
+        str of the directory containing the snapshot files
+    direction: str; 'x', 'y' or 'z' only
+        read either x, y or z axis data
+    t0: float
+        start time
+    t1: float
+        end time
+    dt: float
+        time step
+        
+    Returns
+    -------
+    G_ALL, N_ALL: list, list
+        lists containing the loaded snapshot
+    """
     #t = np.arange(t0,t1+dt,dt)
     N = int((t1-t0)/dt)+1
     G_ALL = []
@@ -179,8 +299,12 @@ def read_snapshot_all_fast(snapshot_dir, direction='z', t0=0.0, t1=12.0, dt=0.1)
     return G_ALL, N_ALL
 
 def extract_snapshot_loc_fast(G_ALL, X=0, Y=0, Z=0):
-    #extracts a time series snapshot at a particular location from the output
-    #of read_snapshot_all_fast()
+    """
+    extracts a time series snapshot at a particular location from the output
+    of read_snapshot_all_fast()
+    
+    This function is not completed...
+    """
     return 0
 
 def read_snapshot_loc3D(snapshot_dir, X=0, Y=0, Z=0, t0=0.0, t1=12.0, dt=0.1):     
