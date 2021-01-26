@@ -3,3 +3,5 @@ These are python versions of the original seismic analysis programs written by D
 The entire code is in a little bit of a mess which I apologize for.
 
 The main functions to be used are contained in ymaeda_tools.py. The other two scripts contains boilerplate code which I used to basically test things out.
+
+The code here has been reworked into the new project: https://github.com/natsunoyuki/seismic_analysis_tools. Please refer to that repository instead!
